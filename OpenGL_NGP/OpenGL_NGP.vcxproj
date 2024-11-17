@@ -141,18 +141,30 @@
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="models\shaderClass.cpp" />
+    <ClCompile Include="models\Texture.cpp" />
     <ClCompile Include="models\VAO.cpp" />
     <ClCompile Include="models\VBO.cpp" />
+    <ClCompile Include="stb.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Libraries\include\std\stb_image.h" />
     <ClInclude Include="models\EBO.h" />
     <ClInclude Include="models\shaderClass.h" />
+    <ClInclude Include="models\Texture.h" />
     <ClInclude Include="models\VAO.h" />
     <ClInclude Include="models\VBO.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="shaders\textureShader.frag" />
+    <None Include="shaders\textureShader.vert" />
     <None Include="shaders\default.frag" />
     <None Include="shaders\default.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="Libraries\lib\glfw3.lib" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\t1.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
