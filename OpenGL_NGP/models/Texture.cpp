@@ -1,4 +1,5 @@
 #include"Texture.h"
+#include "Renderer.h"
 
 Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType)
 {
@@ -6,7 +7,10 @@ Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, 
 	int widthImg, heightImg, numColCh;
 	stbi_set_flip_vertically_on_load(true);
 	unsigned char* bytes = stbi_load(image, &widthImg, &heightImg, &numColCh, 0);
-
+	if (!bytes) {
+		std::cerr << "Failed to load texture: " << image << std::endl;
+		return;
+	}
 	glGenTextures(1, &ID);
 	glActiveTexture(slot);
 	glBindTexture(texType, ID);
@@ -20,8 +24,8 @@ Texture::Texture(const char* image, GLenum texType, GLenum slot, GLenum format, 
 	glTexParameteri(texType, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	// Assigns the image to the OpenGL Texture object
-	glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, bytes);
-	glGenerateMipmap(texType);
+	GLCall(glTexImage2D(texType, 0, GL_RGBA, widthImg, heightImg, 0, format, pixelType, bytes));
+	GLCall(glGenerateMipmap(texType));
 
 	// Deletes the image data 
 	stbi_image_free(bytes);

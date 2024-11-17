@@ -39,6 +39,9 @@
     <ClCompile Include="stb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="models\Renderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="models\VBO.h">
@@ -59,19 +62,18 @@
     <ClInclude Include="models\Texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="models\Renderer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.vert" />
     <None Include="shaders\default.frag" />
     <None Include="shaders\textureShader.frag" />
     <None Include="shaders\textureShader.vert" />
+    <None Include="shaders\shader3D.vert" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\lib\glfw3.lib" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="resources\t1.png">
-      <Filter>Resource Files</Filter>
-    </Image>
   </ItemGroup>
 </Project>
