@@ -137,6 +137,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="models\Camera.cpp" />
     <ClCompile Include="models\EBO.cpp" />
     <ClCompile Include="glad.c" />
     <ClCompile Include="Main.cpp" />
@@ -149,15 +150,19 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Libraries\include\std\stb_image.h" />
+    <ClInclude Include="models\Camera.h" />
     <ClInclude Include="models\EBO.h" />
     <ClInclude Include="models\Renderer.h" />
     <ClInclude Include="models\shaderClass.h" />
     <ClInclude Include="models\Texture.h" />
     <ClInclude Include="models\VAO.h" />
     <ClInclude Include="models\VBO.h" />
+    <ClInclude Include="shapes\shape.h" />
+    <ClInclude Include="shapes\Wall.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\shader3D.vert" />
+    <None Include="shaders\shaderCamera.vert" />
     <None Include="shaders\textureShader.frag" />
     <None Include="shaders\textureShader.vert" />
     <None Include="shaders\default.frag" />

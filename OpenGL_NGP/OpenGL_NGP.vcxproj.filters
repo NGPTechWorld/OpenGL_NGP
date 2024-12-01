@@ -42,6 +42,9 @@
     <ClCompile Include="models\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="models\Camera.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="models\VBO.h">
@@ -65,6 +68,15 @@
     <ClInclude Include="models\Renderer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="models\Camera.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shapes\shape.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="shapes\Wall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\default.vert" />
@@ -72,6 +84,7 @@
     <None Include="shaders\textureShader.frag" />
     <None Include="shaders\textureShader.vert" />
     <None Include="shaders\shader3D.vert" />
+    <None Include="shaders\shaderCamera.vert" />
   </ItemGroup>
   <ItemGroup>
     <Library Include="Libraries\lib\glfw3.lib" />

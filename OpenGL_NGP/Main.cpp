@@ -1,5 +1,6 @@
-#include<iostream>
+﻿#include<iostream>
 #include<glad/glad.h>
+#include <vector>
 #include<GLFW/glfw3.h>
 #include<stb/stb_image.h>
 #include<glm/glm.hpp>
@@ -9,11 +10,13 @@
 #include"models/VAO.h"
 #include"models/VBO.h"
 #include"models/EBO.h"
+#include"shapes/Shape.h"
+#include"shapes/Wall.h"
 #include"models/Texture.h"
 #include "models/Renderer.h"
-
-int height = 800;
-int width = 800;
+#include "models/Camera.h"
+int height = 720;
+int width = 1280;
 
 //hellp
 //hellp
@@ -97,6 +100,11 @@ VAO drow3DExample() {
 	VBO1.Delete(); EBO1.Delete();
 	return VAO1;
 }
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+	glViewport(0, 0, width, height);
+}
+
 int main()
 {
 	// Init GLFW & Create Windows
@@ -104,7 +112,7 @@ int main()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	GLFWwindow* window = glfwCreateWindow(800, 800, "OpenGL NGP", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(width, height, "OpenGL NGP", NULL, NULL);
 	
 	if (window == NULL)
 	{
@@ -115,62 +123,55 @@ int main()
 	glfwMakeContextCurrent(window);
 	gladLoadGL();
 	glViewport(0, 0, width, height);
-
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	//=======================================
 
-	std::string texPath = "resources/planks.png";
+	std::string texPath = "resources/pop_cat.png";
 	Shader shaderProgram("shaders/default.vert", "shaders/default.frag");
 	Shader shaderTextureProgram("shaders/textureShader.vert", "shaders/textureShader.frag");
 	Shader shader3DProgram("shaders/shader3D.vert", "shaders/textureShader.frag");
-
+	Shader shaderCameraProgram("shaders/shaderCamera.vert", "shaders/textureShader.frag");
 	// Texture
-	Texture popTex((texPath).c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
-	popTex.textureUnit(shader3DProgram, "tex0", 0);
-	VAO VAO1=drow3DExample();
-	GLuint uniID = glGetUniformLocation(shader3DProgram.ID, "scale");
-	float rotation = 0.0f;
-	double prevTime = glfwGetTime();
-	glEnable(GL_DEPTH_TEST);
+	//Texture popTex((texPath).c_str(), GL_TEXTURE_2D, GL_TEXTURE0, GL_RGBA, GL_UNSIGNED_BYTE);
+	////popTex.textureUnit(shaderCameraProgram, "tex0", 0);
+	//VAO VAO1=drow3DExample();
+	//GLuint uniID = glGetUniformLocation(shaderCameraProgram.ID, "scale");
+	//float rotation = 0.0f;
+	//double prevTime = glfwGetTime();
+	//glEnable(GL_DEPTH_TEST);
+	Camera camera(width, height, glm::vec3(0.0f, 0.0f, 2.0f));
 
+	std::vector<Wall> walls = {
+	   Wall(glm::vec3(0.0f, 0.0f, -2.0f), glm::vec3(1.0f, 0.0f, 0.0f)), // حائط أمامي
+	   Wall(glm::vec3(-2.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)), // حائط يساري
+	   Wall(glm::vec3(2.0f, 0.0f, 0.0f), glm::vec3(0.0f, 0.0f, 1.0f))  // حائط يميني
+	};
 	//Drow Part
 	while (!glfwWindowShouldClose(window))
 	{
 		//glClear(GL_COLOR_BUFFER_BIT);
+		glClearColor(0.83f, 0.95f, 1.0f, 1.0f);
 		GLCall(glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT));
-		shader3DProgram.Activate();
-		// Simple timer
-		double crntTime = glfwGetTime();
-		if (crntTime - prevTime >= 1 / 60)
-		{
-			rotation += 0.005f;
-			prevTime = crntTime;
+		shaderCameraProgram.Activate();
+
+	//	// Simple timer
+		camera.Inputs(window);
+		camera.Matrix(45.0f, 0.1f, 100.0f, shaderCameraProgram, "camMatrix");
+	/*	glUniform1f(uniID, 0);*/
+	//	popTex.Bind();
+	//	VAO1.Bind();
+	//	GLCall(glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0));
+		/*wall.draw(shaderCameraProgram);*/
+		for (Wall& wall : walls) {
+			wall.draw(shaderCameraProgram);
 		}
 
-		glm::mat4 model = glm::mat4(1.0f);
-		glm::mat4 view = glm::mat4(1.0f);
-		glm::mat4 proj = glm::mat4(1.0f);
-
-		model = glm::rotate(model, glm::radians(rotation), glm::vec3(0.5f, 1.0f, 0.0f));
-		view = glm::translate(view, glm::vec3(0.0f, -0.5f, -2.0f));
-		proj = glm::perspective(glm::radians(45.0f), (float)width / height, 0.1f, 100.0f);
-	
-		int modelLoc = glGetUniformLocation(shader3DProgram.ID, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		int viewLoc = glGetUniformLocation(shader3DProgram.ID, "view");
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-		int projLoc = glGetUniformLocation(shader3DProgram.ID, "proj");
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
-
-	/*	glUniform1f(uniID, 0);*/
-		popTex.Bind();
-		VAO1.Bind();
-		GLCall(glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, 0));
 		GLCall(glfwSwapBuffers(window));
 		glfwPollEvents();
 	}
-	VAO1.Delete();
-	popTex.Delete();
-	shader3DProgram.Delete();
+	//VAO1.Delete();
+	//popTex.Delete();
+	shaderCameraProgram.Delete();
 	glfwDestroyWindow(window);
 	glfwTerminate();
 	return 0;
